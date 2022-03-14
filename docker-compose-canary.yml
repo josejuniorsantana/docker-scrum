@@ -1,0 +1,80 @@
+version: '3.9'
+
+services:
+  scrum-postgres:
+    image: "postgres:9.6-alpine"
+    container_name: scrum-postgres
+    hostname: scrum-postgres
+    volumes:
+      - ./scrum-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - db
+      - back-scrum
+
+    environment:
+      - POSTGRES_DB=scrum
+      - POSTGRES_USER=scrum
+      - POSTGRES_PASSWORD=scrum
+
+  scrum-app-java:
+    build: ./scrum-app-java
+    container_name: scrum-app-java
+    hostname: scrum-app-java
+    environment:
+      - DB_SERVER=scrum-postgres
+      - POSTGRES_DB=scrum
+      - POSTGRES_USER=scrum
+      - POSTGRES_PASSWORD=scrum
+    networks:
+      - back-scrum
+
+  scrum-app-python:
+    build: ./scrum-app-python
+    container_name: scrum-app-python
+    hostname: scrum-app-python
+    environment:
+      - DB_SERVER=scrum-postgres
+      - POSTGRES_DB=scrum
+      - POSTGRES_USER=scrum
+      - POSTGRES_PASSWORD=scrum
+    networks:
+      - back-scrum
+
+  scrum-ui:
+    build:
+      context: ./scrum-ui
+      dockerfile: DockerfileV2
+    container_name: scrum-ui
+    hostname: scrum-ui
+    ports:
+      - 4200:80
+    networks:
+      - front-scrum
+      - proxy
+    links:
+      - nginx
+
+
+  nginx:
+    image: nginx
+    container_name: nginx
+    hostname: nginx
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+#    ports:
+#      - 8080:80
+    networks:
+      - proxy
+      - back-scrum
+
+
+networks:
+  front-scrum:
+  back-scrum:
+  db:
+  proxy:
+
+volumes:
+  scrum-data:
