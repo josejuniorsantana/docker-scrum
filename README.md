@@ -31,7 +31,8 @@ As instruções de instalação podem ser encontradas nos seguintes endereços:
   - [Windows](https://docs.docker.com/docker-for-windows/install/);
   - [Mac](https://docs.docker.com/docker-for-mac/install/).
 
-- O **Dosker Compose** *por padrão, o docker compose já vem instalado no Windows e no Mac
+- O **Docker Compose** 
+   *por padrão, o docker compose já vem instalado no Windows e no Mac
   - [Ubuntu](https://docs.docker.com/compose/install/).
 
 
